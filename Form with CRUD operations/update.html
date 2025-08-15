@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update</title>
+    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="style2.css" />
+  </head>
+  <body>
+    <div class="left">
+      <h1 id="heading">Form</h1>
+
+      <form action="">
+        <div class="form-data">
+          <label for="username">Username:</label>
+          <input type="text" id="uname" />
+        </div>
+        <div class="form-data">
+          <label for="email">Email:</label>
+          <input type="email" id="email" />
+        </div>
+
+        <div class="one-line">
+          <label for="gender">Gender:</label>
+          <input type="radio" id="Male" name="gender" value="Male" />
+          <label for="Male">Male</label>
+          <input type="radio" id="Female" name="gender" value="Female" />
+          <label for="Female">Female</label>
+        </div>
+
+        <div class="form-data">
+          <label for="role">Role:</label>
+          <select name="role" id="role">
+            <option value="">Select Your Role</option>
+            <option value="Employee">Admin</option>
+            <option value="Employee">Employee</option>
+          </select>
+        </div>
+
+        <div class="form-data">
+          <label for="password">Password:</label>
+          <input type="password" id="password" />
+        </div>
+
+        <div class="buttons">
+          <button type="button" id="update" class="Btns">Update</button>
+          <button type="button" id="delete" class="Btns">Delete</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const uname = document.getElementById("uname");
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+      const select = document.getElementById("role");
+      const updateBtn = document.getElementById("update");
+      const deleteBtn=document.getElementById("delete");
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const user = JSON.parse(localStorage.getItem("editUser"));
+
+        if (user) {
+          uname.value = user.name;
+          email.value = user.email;
+          password.value = user.password;
+          select.value = user.role;
+
+          if (user.gender) {
+            let selectedRadio = document.querySelector(
+              `input[name="gender"][value="${user.gender}"]`);
+            if (selectedRadio) selectedRadio.checked = true;
+          }
+        }
+      });
+
+      updateBtn.addEventListener("click", () => {
+        let index = localStorage.getItem("editIndex");
+        let allUsers = JSON.parse(localStorage.getItem("users"));
+
+        let updatedUser = {
+          name: uname.value,
+          email: email.value,
+          password: password.value,
+          role: select.value,
+          gender: document.querySelector('input[name="gender"]:checked').value,
+        };
+
+        allUsers[index] = updatedUser;
+        localStorage.setItem("users", JSON.stringify(allUsers));
+        window.location.href = "index.html";
+      });
+
+      deleteBtn.addEventListener("click",()=>{
+        let index = localStorage.getItem("editIndex");
+        let allUsers = JSON.parse(localStorage.getItem("users"));
+
+        allUsers.splice(index, 1);
+        localStorage.setItem("users", JSON.stringify(allUsers));
+        window.location.href = "index.html";
+      });
+    </script>
+  </body>
+</html>
